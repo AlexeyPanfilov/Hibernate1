@@ -57,7 +57,7 @@ public class DataBase {
                         Product.class).getSingleResult();
         System.out.println(clientFromDb);
         System.out.println(productFromDb);
-        clientFromDb.getProducts().add(productFromDb);
+        productFromDb.getClients().add(clientFromDb);
         session.getTransaction().commit();
     }
 

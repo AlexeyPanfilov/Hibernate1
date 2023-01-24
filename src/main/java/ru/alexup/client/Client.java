@@ -17,12 +17,7 @@ public class Client {
     @Column(name = "name")
     protected String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "goods_clients",
-            joinColumns = @JoinColumn(name = "clients_id"),
-            inverseJoinColumns = @JoinColumn(name = "goods_id")
-    )
+    @ManyToMany(mappedBy = "clients")
     protected List<Product> products;
 
     public Long getId() {
