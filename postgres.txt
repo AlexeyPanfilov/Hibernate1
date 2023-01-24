@@ -1,0 +1,111 @@
+postgres=# CREATE TABLE clients (id bigserial PRIMARY KEY, name varchar(255));
+CREATE TABLE
+postgres=# \dt
+           Список отношений
+ Схема  |   Имя   |   Тип   | Владелец
+--------+---------+---------+----------
+ hw1hib | clients | таблица | postgres
+(1 строка)
+
+
+postgres=# CREATE TABLE goods (id bigserial PRIMARY KEY, title varchar(255), price int);
+CREATE TABLE
+postgres=# \dt
+           Список отношений
+ Схема  |   Имя   |   Тип   | Владелец
+--------+---------+---------+----------
+ hw1hib | clients | таблица | postgres
+ hw1hib | goods   | таблица | postgres
+(2 строки)
+
+
+postgres=# CREATE TABLE goods_clients (goods_id bigint, clients_id bigint, FOREIGN KEY (goods_id) REFERENCES goods(id), FOREIGN KEY (clients_id) REFERENCES clients(id));
+CREATE TABLE
+postgres=# \dt
+              Список отношений
+ Схема  |      Имя      |   Тип   | Владелец
+--------+---------------+---------+----------
+ hw1hib | clients       | таблица | postgres
+ hw1hib | goods         | таблица | postgres
+ hw1hib | goods_clients | таблица | postgres
+(3 строки)
+
+
+postgres=# SELECT * FROM clients
+postgres-# ;
+ id |    name
+----+------------
+  1 | Vasya
+  2 | Kolya
+  3 | Anya
+  4 | Cat
+  5 | Crazy Frog
+(5 строк)
+
+
+postgres=# SELECT * FROM products
+postgres-# ;
+ОШИБКА:  отношение "products" не существует
+СТРОКА 1: SELECT * FROM products
+                        ^
+postgres=# SELECT * FROM goods;
+ id |   title   | price
+----+-----------+-------
+  1 | Milk      |    80
+  2 | Cola      |   100
+  3 | Bread     |    50
+  4 | Ketchup   |    50
+  5 | Sausages  |   150
+  6 | Tea       |   100
+  7 | Cookies   |   120
+  8 | Chocolate |    80
+(8 строк)
+
+
+postgres=# SELECT i FROM clients WHERE name = 'Vasya';
+ОШИБКА:  столбец "i" не существует
+СТРОКА 1: SELECT i FROM clients WHERE name = 'Vasya';
+                 ^
+postgres=# SELECT name FROM clients WHERE name = 'Vasya';
+ name
+-------
+ Vasya
+(1 строка)
+
+
+postgres=# \d clients
+                                            Таблица "hw1hib.clients"
+ Столбец |          Тип           | Правило сортировки | Допустимость NULL |            По умолчанию
+---------+------------------------+--------------------+-------------------+-------------------------------------
+ id      | bigint                 |                    | not null          | nextval('clients_id_seq'::regclass)
+ name    | character varying(255) |                    |                   |
+Индексы:
+    "clients_pkey" PRIMARY KEY, btree (id)
+Ссылки извне:
+    TABLE "goods_clients" CONSTRAINT "goods_clients_clients_id_fkey" FOREIGN KEY (clients_id) REFERENCES clients(id)
+
+
+postgres=# SELECT * FROM goods_clients;
+ goods_id | clients_id
+----------+------------
+        6 |          1
+        6 |          1
+(2 строки)
+
+
+postgres=# SELECT * FROM goods_clients;
+ goods_id | clients_id
+----------+------------
+        6 |          1
+(1 строка)
+
+
+postgres=# SELECT * FROM goods_clients;
+ goods_id | clients_id
+----------+------------
+        6 |          1
+        6 |          3
+(2 строки)
+
+
+postgres=# UPDATE clients SET name = 'CrazyFrog' WHERE id = 5;
