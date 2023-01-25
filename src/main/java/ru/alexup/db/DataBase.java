@@ -94,5 +94,8 @@ public class DataBase {
 
     public void closeFactory () {
         factory.close();
+        if (session != null) {
+            session.close();
+        }
     }
 }
